@@ -1,6 +1,6 @@
 const std = @import("std");
 
-pub const packing = enum(c_int) {
+pub const Packing = enum(c_int) {
     rgb24_be,
     rgb24_le,
     rgb24,
@@ -116,6 +116,11 @@ pub const packing = enum(c_int) {
     packing_max,
 };
 
+pub const Flags = enum(c_ulong) {
+    SKIP_UNPACKED_PLANES = @as(c_ulong, 1) << 0,
+    ALPHA_SET_ONE = @as(c_ulong, 1) << 1,
+};
+
 pub const buffer_param = extern struct {
     src: [4]?*const anyopaque,
     dst: [4]?*anyopaque,
@@ -123,20 +128,15 @@ pub const buffer_param = extern struct {
     dst_stride: [4]c_longlong,
     width: c_uint,
     height: c_uint,
-    packing: packing,
-};
-
-pub const Flags = enum(c_ulong) {
-    SKIP_UNPACKED_PLANES = @as(c_ulong, 1) << 0,
-    ALPHA_SET_ONE = @as(c_ulong, 1) << 1,
+    packing: Packing,
 };
 
 pub const unpack_func = ?*const fn (?*const anyopaque, [*c]const ?*anyopaque, c_uint, c_uint) callconv(.C) void;
 pub const pack_func = ?*const fn ([*c]const ?*const anyopaque, ?*anyopaque, c_uint, c_uint) callconv(.C) void;
 
-pub extern fn select_unpack_func(packing: packing) unpack_func;
-pub extern fn select_pack_func(packing: packing) pack_func;
-pub extern fn select_pack_func_ex(packing: packing, alpha_one_fill: c_int) pack_func;
+pub extern fn select_unpack_func(packing: Packing) unpack_func;
+pub extern fn select_pack_func(packing: Packing) pack_func;
+pub extern fn select_pack_func_ex(packing: Packing, alpha_one_fill: c_int) pack_func;
 
 pub extern fn unpack_frame(param: [*c]const buffer_param, flags: Flags) void;
 pub extern fn pack_frame(param: [*c]const buffer_param, flags: Flags) void;
