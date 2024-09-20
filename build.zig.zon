@@ -1,0 +1,12 @@
+.{
+    .name = "cppz",
+    .version = "0.1.0",
+    .dependencies = .{
+        .libp2p = .{
+            .url = "git+https://bitbucket.org/the-sekrit-twc/libp2p.git#f52c14efc88c53317d00f45610a9e42030ba8a21",
+            .hash = "12208929c9ba891baad2962f0e1b9842ff47bd01d4ed49a952b37a83708c91240900",
+        },
+    },
+
+    .paths = .{""},
+}
