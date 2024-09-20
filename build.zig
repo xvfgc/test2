@@ -14,6 +14,7 @@ pub fn build(b: *std.Build) void {
 
     lib.addIncludePath(libp2p_dep.path("."));
     lib.addCSourceFiles(.{
+        .root = libp2p_dep.path("."),
         .files = &.{
             "p2p_api.cpp",
             "v210.cpp",
